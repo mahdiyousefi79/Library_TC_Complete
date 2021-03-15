@@ -20,4 +20,13 @@ public class BasePage {
     public WebElement booksPageLink;
 
 
+    @FindBy(id = "navbarDropdown")
+    public WebElement dropdownLogout;
+
+    @FindBy(linkText = "Log Out")
+    public WebElement linkLogout;
+
+
+    @FindBy(id = "menu_item")
+    public WebElement navLinksContainer;
 }

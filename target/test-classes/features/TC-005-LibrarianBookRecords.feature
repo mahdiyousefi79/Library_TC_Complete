@@ -1,4 +1,3 @@
-
 @TC05
 Feature: 5. As a librarian, I should be able to see book records on user page
 
@@ -13,7 +12,6 @@ Feature: 5. As a librarian, I should be able to see book records on user page
   Scenario: Show records for count options
     Given User login as a "librarian"
     When User is on "Users" module
-    And User clicks "Show" dropdown
     Then User should see the following dropdown options on "Show" dropDown:
       | 5   |
       | 10  |

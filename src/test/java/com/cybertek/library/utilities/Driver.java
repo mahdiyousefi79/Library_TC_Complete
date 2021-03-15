@@ -6,7 +6,8 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 
 import java.util.concurrent.TimeUnit;
-                                // this Driver class is setting for parallel test too
+
+// this Driver class is setting for parallel test too
 public class Driver {
 
     private Driver() {
@@ -42,4 +43,3 @@ public class Driver {
         }
     }
 }
-

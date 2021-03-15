@@ -78,7 +78,7 @@ public class BrowserUtils {
      * @param
      * @return
      */
-    public static List<String> getElementsText(List<WebElement> webElementList){
+    public static List<String> getWebElementsText(List<WebElement> webElementList){
 
         //Placeholder empty list of web element
         List<String> webElementsAsString = new ArrayList<>();

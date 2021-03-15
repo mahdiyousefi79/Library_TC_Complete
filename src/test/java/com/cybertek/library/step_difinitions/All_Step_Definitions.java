@@ -10,16 +10,30 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 
 import java.util.List;
 
-public class All_Step_Definitions {
+public class All_Step_Definitions  {
     LoginPage loginPage = new LoginPage();
     BasePage basePage = new BasePage();
     Users_Module_Page users_module_page = new Users_Module_Page();
     Select select;
+
+
+
+
+    private String getCurrentPage(){
+        String url = Driver.getDriver().getCurrentUrl();
+        return url.substring(url.lastIndexOf("/") + 1);
+    }
+
+
+
+
+
 
 
     @Given("User is on Library login {string} page")
@@ -39,8 +53,8 @@ public class All_Step_Definitions {
         String password = "";
         switch (role) {
             case "student":
-                userName = ConfigurationReader.getProperty("student95_user1");
-                password = ConfigurationReader.getProperty("student95_password1");
+                userName = ConfigurationReader.getProperty("student95_user");
+                password = ConfigurationReader.getProperty("student95_password");
                 break;
             case "librarian":
                 userName = ConfigurationReader.getProperty("lib22_user");
@@ -54,6 +68,78 @@ public class All_Step_Definitions {
 
 
     }
+
+
+    @Then("User is on {string} page")
+    public void user_is_on_page(String expectedPage) {
+        BrowserUtils.wait(5);
+        String actualPage = getCurrentPage();
+        System.out.println("actualPage = " + actualPage);
+        Assert.assertEquals(expectedPage, actualPage);
+        //Driver.closeDriver();                  // Because it should be login two times with different roles we should close driver unless it would be get error
+    }
+
+
+
+    @When("User loges out from app")
+    public void user_loges_out_from_app() {
+
+
+
+        // this DropDown is simple Html one not selected one
+        basePage.dropdownLogout.click();
+        BrowserUtils.wait(2);
+        basePage.linkLogout.click();
+
+
+    }
+
+
+
+
+    @Then("User is on Login page")
+    public void user_is_on_login_page() {
+        String expectedPage = "login.html";
+        String actualPage = getCurrentPage();
+
+        System.out.println("actualPage = " + actualPage);
+        Assert.assertEquals(expectedPage, actualPage);
+    }
+
+
+    @Given("User login with credentials {string} and {string}:")
+    public void user_login_with_credentials_and(String username, String password) {
+        loginPage.inputEmail.sendKeys(username);
+        loginPage.inputPassword.sendKeys(password);
+        BrowserUtils.wait(2);
+        loginPage.signInButton.click();
+    }
+
+
+
+
+    @Then("User should see following modules:")
+    public void user_should_see_following_modules(List<String> expectedModules) {
+
+    List<WebElement> actualModulesAsWebElements  = basePage.navLinksContainer.findElements(By.xpath("//span[@class='title']"));
+
+    List<String> actualModulesAsString = BrowserUtils.getWebElementsText(actualModulesAsWebElements);
+
+        System.out.println("actualModulesAsString = " + actualModulesAsString);
+
+        Assert.assertEquals(actualModulesAsString,expectedModules);
+
+
+    }
+
+
+
+
+
+
+
+
+
 
     @When("User is on {string} module")
     public void user_is_on_module(String module) {
@@ -73,25 +159,6 @@ public class All_Step_Definitions {
         }
     }
 
-    @When("User clicks {string} dropdown")
-    public void user_clicks_dropdown(String dropDown) {
-
-        switch (dropDown) {
-
-            case "User Group":
-                users_module_page.userGroupDropdown.click();
-
-                break;
-            case "Status":
-                users_module_page.statusDropdown.click();
-
-                break;
-
-            case "Show":
-                users_module_page.showDropdown.click();
-
-        }
-    }
 
 
     @Then("User should see the following dropdown options on {string} dropDown:")
@@ -119,13 +186,13 @@ public class All_Step_Definitions {
         List<WebElement> actualWebElements = select.getOptions();
 
         BrowserUtils.waitForVisibility(users_module_page.statusDropdown, 10);
-        List<String> actualDropDownOptions = BrowserUtils.getElementsText(actualWebElements);
+        List<String> actualDropDownOptions = BrowserUtils.getWebElementsText(actualWebElements);
 
         System.out.println("expectedDropdownOptions = " + expectedDropdownOptions);
         System.out.println("actualDropDownOptions = " + actualDropDownOptions);
         Assert.assertEquals("DropDown options are different", expectedDropdownOptions, actualDropDownOptions);
 
-        Driver.closeDriver();
+
     }
 
 
@@ -143,7 +210,7 @@ public class All_Step_Definitions {
         System.out.println("expectedRecordsNum = " + expectedRecordsNum);
         System.out.println("actualRecordsNum = " + actualRecordsNum);
 
-        Driver.closeDriver();
+
 
     }
 
